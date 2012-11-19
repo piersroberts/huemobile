@@ -1,0 +1,97 @@
+<html>
+<head>
+  <meta name=”Viewport” content=”width=320; user-scaleable=no; initial-scale=1.0” />
+<title>Light test</title>
+<script src="jquery.js"></script>  
+
+<script type="text/javascript">
+
+var ip = '192.168.0.14';
+var key = '16e91ccb3cf0cf2fe8915d3150b14b7';
+
+(function( $ ) {
+
+    var methods = {
+      init : function(options){},
+      query : function(){
+        url = 'http://'+ip+'/api/'+key;
+        $('#output').append(url);
+
+        //$.get(url,function(data){
+        //  $('#output').append(JSON.stringify(data));
+        //});
+
+var request = $.ajax({
+  url: url,
+  type: "GET"
+});
+
+request.done(function(msg) {
+  $("#output").html( JSON.stringify(msg) );
+});
+
+request.fail(function(jqXHR, textStatus) {
+  alert( "Request failed: " + textStatus );
+});
+
+      },
+      turnOn : function( light ) {},
+      turnOff : function( light) {},
+      hide : function( ) {},
+      update : function( content ) {}
+  };
+
+
+    $.fn.hue = function( method ) {
+      if ( methods[method] ) {
+        return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
+      } else if ( typeof method === 'object' || ! method ) {
+        return methods.init.apply( this, arguments );
+      } else {
+        $.error( 'Method ' +  method + ' does not exist on jQuery.hue' );
+      }
+    };
+})( jQuery );
+</script>
+<style type="text/css">
+html, body
+{
+ margin: 0;
+ padding: 0; 
+ border: 0;
+}
+
+body 
+{
+ font-family:Arial,  sans-serif;
+ line-height:1.5;
+ font-size:16px;
+ background: #fff;
+ padding:5px;
+ color: #000;
+ word-wrap: break-word;
+ -webkit-text-size-adjust: none;
+}
+
+h1, h2, h3, h4, h5, h6{ font-weight: normal; }
+
+p img { float: left; margin: 0 10px 5px 0; padding: 0; }
+
+img { border: 0; max-width: 100%; }
+
+table { width:auto; border-collapse: collapse;border-spacing: 0; }
+#output{background-color:black;font-family: monospace;color:green;}
+</style>
+</head>
+<body>
+<h2>Hello!</h2>
+<h1 id='getinfo'>CLICK ME</h1>
+<div id="output">...</div>
+
+<script type="text/javascript">
+
+
+$('#getinfo').click(function(){$().hue('query');});
+</script>
+</body>
+</html>
