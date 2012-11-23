@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="Viewport" content="width=320; user-scaleable=no; initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
 <title>Light test</title>
 <script src="jquery.js"></script>  
 
@@ -9,6 +10,12 @@
 
 var ip = '192.168.0.14';
 var key = '16e91ccb3cf0cf2fe8915d3150b14b7';
+
+            window.addEventListener('load', function() {
+                document.body.addEventListener('touchmove', function(e) {
+                    e.preventDefault();
+                }, false);
+            }, false);
 
 (function( $ ) {
 jQuery.support.cors = true;
@@ -22,23 +29,39 @@ jQuery.support.cors = true;
         //  $('#output').append(JSON.stringify(data));
         //});
 
-var request = $.ajax({
-  url: url,
-  type: "GET",
-});
+        var request = $.ajax({
+          url: url,
+          type: "GET",
+        });
 
-request.done(function(msg) {
-  $("#output").html( JSON.stringify(msg) );
-});
+        request.done(function(msg) {
+          $("#output").html( JSON.stringify(msg) );
+        });
 
-request.error(function(jqXHR, textStatus) {
-  alert( "Request failed: " + textStatus );
-  $("#output").html( JSON.stringify(jqXHR) );
-});
+        request.error(function(jqXHR, textStatus) {
+          alert( "Request failed: " + textStatus );
+          $("#output").html( JSON.stringify(jqXHR) );
+        });
 
       },
-      turnOn : function( light ) {},
-      turnOff : function( light) {},
+      turnOn : function( light ) {
+         url = 'http://'+ip+'/api/'+key+'/lights/'+light+'/state';
+        data = {"bri": 254, "on": true};
+        var request = $.ajax({
+          url: url,
+          type: "PUT",
+          data: JSON.stringify(data)
+        });
+      },
+      turnOff : function( light) {
+                url = 'http://'+ip+'/api/'+key+'/lights/'+light+'/state';
+        data = {"on": false};
+        var request = $.ajax({
+          url: url,
+          type: "PUT",
+          data: JSON.stringify(data)
+        });
+      },
       hide : function( ) {},
       update : function( content ) {}
   };
@@ -55,41 +78,39 @@ request.error(function(jqXHR, textStatus) {
     };
 })( jQuery );
 </script>
-<style type="text/css">
-html, body
-{
- margin: 0;
- padding: 0; 
- border: 0;
-}
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-body 
-{
- font-family:Arial,  sans-serif;
- line-height:1.5;
- font-size:16px;
- background: #fff;
- padding:5px;
- color: #000;
- word-wrap: break-word;
- -webkit-text-size-adjust: none;
-}
-
-h1, h2, h3, h4, h5, h6{ font-weight: normal; }
-
-p img { float: left; margin: 0 10px 5px 0; padding: 0; }
-
-img { border: 0; max-width: 100%; }
-
-table { width:auto; border-collapse: collapse;border-spacing: 0; }
-#output{background-color:black;font-family: monospace;color:green;}
-</style>
+  <!-- CSS
+  ================================================== -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/layout.css">
 </head>
 <body>
-<h2>Hello!</h2>
-<h1 id='getinfo'>CLICK ME</h1>
-<div id="output">...</div>
 
+<div class="container">
+<div class="six columns clearfix">
+    <a href="javascript:$().hue('turnOn',1)" class="full-width button">On</a>
+  </div>
+  <div class="six columns clearfix">
+<a href="javascript:$().hue('turnOff',1)" class="full-width button">Off</a>
+  </div>
+  <div class="six columns clearfix">
+    <a href="javascript:$().hue('turnOn',2)" class="full-width button">On</a>
+  </div>
+  <div class="six columns clearfix">
+<a href="javascript:$().hue('turnOff',2)" class="full-width button">Off</a>
+  </div>
+  <div class="six columns clearfix">
+    <a href="javascript:$().hue('turnOff',3)" class="full-width button">On</a>
+  </div>
+  <div class="six columns clearfix">
+<a href="javascript:$().hue('turnOff',3)" class="full-width button">Off</a>
+  </div>
+<div class="twelve columns">
+<div id="output">...</div>
+</div>
+</div>
 <script type="text/javascript">
 
 
