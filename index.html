@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
   <meta name="Viewport" content="width=320; user-scaleable=no; initial-scale=1.0" />
@@ -10,7 +11,7 @@ var ip = '192.168.0.14';
 var key = '16e91ccb3cf0cf2fe8915d3150b14b7';
 
 (function( $ ) {
-
+jQuery.support.cors = true;
     var methods = {
       init : function(options){},
       query : function(){
@@ -23,15 +24,16 @@ var key = '16e91ccb3cf0cf2fe8915d3150b14b7';
 
 var request = $.ajax({
   url: url,
-  type: "GET"
+  type: "GET",
 });
 
 request.done(function(msg) {
   $("#output").html( JSON.stringify(msg) );
 });
 
-request.fail(function(jqXHR, textStatus) {
+request.error(function(jqXHR, textStatus) {
   alert( "Request failed: " + textStatus );
+  $("#output").html( JSON.stringify(jqXHR) );
 });
 
       },
